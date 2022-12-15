@@ -5,5 +5,6 @@ namespace WebApiDapperApp.Contracts
     public interface ICompanyRepository
     {
         Task<IEnumerable<Company>> GetCompanies();
+        public Task<Company> GetCompany(int id);
     }
 }

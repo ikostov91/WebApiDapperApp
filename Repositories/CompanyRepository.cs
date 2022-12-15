@@ -23,5 +23,15 @@ namespace WebApiDapperApp.Repositories
 
             return companies.ToList();
         }
+
+        public async Task<Company> GetCompany(int id)
+        {
+            string query = "SELECT * FROM Companies WHERE Id = @Id";
+
+            using var connection = this._context.CreateConnection();
+            var company = await connection.QuerySingleOrDefaultAsync<Company>(query, new { Id = id });
+
+            return company;
+        }
     }
 }

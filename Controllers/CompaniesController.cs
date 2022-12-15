@@ -20,5 +20,12 @@ namespace WebApiDapperApp.Controllers
             var companies = await this._companyRepository.GetCompanies();
             return Ok(companies);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCompany(int id)
+        {
+            var company = await this._companyRepository.GetCompany(id);
+            return Ok(company);
+        }
     }
 }
