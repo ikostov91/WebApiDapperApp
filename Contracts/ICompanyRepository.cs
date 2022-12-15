@@ -1,4 +1,5 @@
-﻿using WebApiDapperApp.Entities;
+﻿using WebApiDapperApp.DTOs;
+using WebApiDapperApp.Entities;
 
 namespace WebApiDapperApp.Contracts
 {
@@ -6,5 +7,6 @@ namespace WebApiDapperApp.Contracts
     {
         Task<IEnumerable<Company>> GetCompanies();
         public Task<Company> GetCompany(int id);
+        public Task<Company> CreateNewCompany(CreateNewCompanyDTO createNewCompanyDTO);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApiDapperApp.Contracts;
+using WebApiDapperApp.DTOs;
 
 namespace WebApiDapperApp.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebApiDapperApp.Controllers
             return Ok(companies);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCompanyById")]
         public async Task<IActionResult> GetCompany(int id)
         {
             var company = await this._companyRepository.GetCompany(id);
@@ -31,6 +32,13 @@ namespace WebApiDapperApp.Controllers
             }
 
             return Ok(company);
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> CreateNewCompany(CreateNewCompanyDTO dto)
+        {
+            var createdCompany = await this._companyRepository.CreateNewCompany(dto);
+            return CreatedAtRoute("GetCompanyById", new { id = createdCompany.Id }, createdCompany);
         }
     }
 }
