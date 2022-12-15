@@ -21,6 +21,8 @@ namespace WebApiDapperApp.Repositories
             using var connection = this._context.CreateConnection();
             var companies = await connection.QueryAsync<Company>(query);
 
+            throw new Exception("Invalid");
+
             return companies.ToList();
         }
 

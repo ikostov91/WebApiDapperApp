@@ -1,4 +1,5 @@
 using WebApiDapperApp.Contracts;
+using WebApiDapperApp.Middleware;
 using WebApiDapperApp.Persistance;
 using WebApiDapperApp.Repositories;
 
@@ -27,6 +28,8 @@ namespace WebApiDapperApp
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 

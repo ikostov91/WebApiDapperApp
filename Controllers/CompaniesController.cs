@@ -25,6 +25,11 @@ namespace WebApiDapperApp.Controllers
         public async Task<IActionResult> GetCompany(int id)
         {
             var company = await this._companyRepository.GetCompany(id);
+            if (company is null)
+            {
+                return NotFound();
+            }
+
             return Ok(company);
         }
     }
