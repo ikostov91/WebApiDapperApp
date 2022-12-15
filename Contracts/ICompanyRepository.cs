@@ -10,5 +10,6 @@ namespace WebApiDapperApp.Contracts
         public Task<Company> CreateNewCompany(CreateNewCompanyDTO createNewCompanyDTO);
         public Task UpdateCompany(int id, UpdateCompanyDTO updateCompanyDto);
         public Task DeleteCompany(int id);
+        public Task<Company> GetCompanyByEmployeeId(int id);
     }
 }

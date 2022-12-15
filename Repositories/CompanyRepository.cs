@@ -84,5 +84,19 @@ namespace WebApiDapperApp.Repositories
             using var connection = this._context.CreateConnection();
             await connection.ExecuteAsync(query, new { Id = id });
         }
+
+        public async Task<Company> GetCompanyByEmployeeId(int id)
+        {
+            string procedureName = "ShowCompanyByEmployeeId";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32, ParameterDirection.Input);
+
+            using var connection = this._context.CreateConnection();
+            var company = await connection.QueryFirstOrDefaultAsync<Company>(
+                procedureName, parameters, commandType: CommandType.StoredProcedure);
+
+            return company;
+        }
     }
 }

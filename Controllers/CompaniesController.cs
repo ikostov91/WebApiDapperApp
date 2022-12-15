@@ -66,5 +66,17 @@ namespace WebApiDapperApp.Controllers
             await this._companyRepository.DeleteCompany(id);
             return NoContent();
         }
+
+        [HttpGet("ByEmployeeId/{employeeId}")]
+        public async Task<IActionResult> GetCompanyForEmployee(int employeeId)
+        {
+            var company = await this._companyRepository.GetCompanyByEmployeeId(employeeId);
+            if (company is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(company);
+        }
     }
 }
