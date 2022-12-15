@@ -76,5 +76,13 @@ namespace WebApiDapperApp.Repositories
             using var connection = this._context.CreateConnection();
             await connection.ExecuteAsync(query, parameters);
         }
+
+        public async Task DeleteCompany(int id)
+        {
+            string query = "DELETE FROM Companies WHERE Id = @Id";
+
+            using var connection = this._context.CreateConnection();
+            await connection.ExecuteAsync(query, new { Id = id });
+        }
     }
 }

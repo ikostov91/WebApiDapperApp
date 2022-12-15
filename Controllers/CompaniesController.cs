@@ -44,7 +44,26 @@ namespace WebApiDapperApp.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCompany(int id, UpdateCompanyDTO dto)
         {
+            var dbCompany = await this._companyRepository.GetCompany(id);
+            if (dbCompany is null)
+            {
+                return NotFound();
+            }
+
             await this._companyRepository.UpdateCompany(id, dto);
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCompany(int id)
+        {
+            var dbCompany = await this._companyRepository.GetCompany(id);
+            if (dbCompany is null)
+            {
+                return NotFound();
+            }
+
+            await this._companyRepository.DeleteCompany(id);
             return NoContent();
         }
     }
