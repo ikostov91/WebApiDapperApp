@@ -62,5 +62,19 @@ namespace WebApiDapperApp.Repositories
 
             return createdCompany;
         }
+
+        public async Task UpdateCompany(int id, UpdateCompanyDTO updateCompanyDto)
+        {
+            string query = "UPDATE Companies Set Name = @Name, Address = @Address, Country = @Country WHERE Id = @Id";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+            parameters.Add("Name", updateCompanyDto.Name, DbType.String);
+            parameters.Add("Address", updateCompanyDto.Address, DbType.String);
+            parameters.Add("Country", updateCompanyDto.Country, DbType.String);
+
+            using var connection = this._context.CreateConnection();
+            await connection.ExecuteAsync(query, parameters);
+        }
     }
 }

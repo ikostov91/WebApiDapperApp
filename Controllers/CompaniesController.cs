@@ -34,11 +34,18 @@ namespace WebApiDapperApp.Controllers
             return Ok(company);
         }
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> CreateNewCompany(CreateNewCompanyDTO dto)
         {
             var createdCompany = await this._companyRepository.CreateNewCompany(dto);
             return CreatedAtRoute("GetCompanyById", new { id = createdCompany.Id }, createdCompany);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCompany(int id, UpdateCompanyDTO dto)
+        {
+            await this._companyRepository.UpdateCompany(id, dto);
+            return NoContent();
         }
     }
 }
