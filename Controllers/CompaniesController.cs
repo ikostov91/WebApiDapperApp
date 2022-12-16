@@ -78,5 +78,17 @@ namespace WebApiDapperApp.Controllers
 
             return Ok(company);
         }
+
+        [HttpGet("WithEmployees/{id}")]
+        public async Task<IActionResult> GetCompanyWithEmployees(int id)
+        {
+            var company = await this._companyRepository.GetCompanyWithEmployees(id);
+            if (company is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(company);
+        }
     }
 }

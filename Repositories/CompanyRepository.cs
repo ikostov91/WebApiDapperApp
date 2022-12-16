@@ -98,5 +98,24 @@ namespace WebApiDapperApp.Repositories
 
             return company;
         }
+
+        public async Task<Company?> GetCompanyWithEmployees(int id)
+        {
+            string query = "SELECT * FROM Companies WHERE Id = @Id;" + "SELECT * FROM Employees WHERE CompanyId = @Id";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+
+            using var connection = this._context.CreateConnection();
+            using var multipleConnection = await connection.QueryMultipleAsync(query, parameters);
+
+            var company = await multipleConnection.ReadSingleOrDefaultAsync<Company>();
+            if (company is not null)
+            {
+                company.Employees = (await multipleConnection.ReadAsync<Employee>()).ToList();
+            }
+
+            return company;
+        }
     }
 }
