@@ -101,7 +101,7 @@ namespace WebApiDapperApp.Repositories
 
         public async Task<Company?> GetCompanyWithEmployees(int id)
         {
-            string query = "SELECT * FROM Companies WHERE Id = @Id;" + "SELECT * FROM Employees WHERE CompanyId = @Id";
+            string query = "SELECT * FROM Companies WHERE Id = @Id; SELECT * FROM Employees WHERE CompanyId = @Id";
 
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, DbType.Int32);
@@ -116,6 +116,52 @@ namespace WebApiDapperApp.Repositories
             }
 
             return company;
+        }
+
+        public async Task<IEnumerable<Company>> GetCompaniesWithEmployees()
+        {
+            string query = "SELECT * FROM Companies AS c JOIN Employees AS e ON c.Id = e.CompanyId";
+
+            using var connection = this._context.CreateConnection();
+
+            var companyList = new List<Company>();
+
+            var companies = await connection.QueryAsync<Company, Employee, Company>(query, (company, employee) =>
+            {
+                var currentCompany = companyList.FirstOrDefault(x => x.Id.Equals(company.Id));
+                if (currentCompany is null)
+                {
+                    currentCompany = company;
+                }
+
+                currentCompany.Employees.Add(employee);
+                companyList.Add(currentCompany);
+
+                return currentCompany;
+            });
+
+            return companies.Distinct().ToList();
+        }
+
+        public async Task CreateMultipleCompanies(IEnumerable<CreateNewCompanyDTO> companiesDto)
+        {
+            string query = "INSERT INTO Companies (Name, Address, Country) VALUES (@Name, @Address, @Country)";
+
+            using var connection = this._context.CreateConnection();
+            connection.Open();
+
+            using var transaction = connection.BeginTransaction();
+            foreach (var companyDto in companiesDto)
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("Name", companyDto.Name, DbType.String);
+                parameters.Add("Address", companyDto.Address, DbType.String);
+                parameters.Add("Country", companyDto.Country, DbType.String);
+
+                await connection.ExecuteAsync(query, parameters, transaction: transaction);
+            }
+
+            transaction.Commit();
         }
     }
 }

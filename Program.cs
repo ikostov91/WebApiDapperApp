@@ -35,7 +35,6 @@ namespace WebApiDapperApp
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();

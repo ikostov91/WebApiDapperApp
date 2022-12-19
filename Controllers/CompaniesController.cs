@@ -68,7 +68,7 @@ namespace WebApiDapperApp.Controllers
         }
 
         [HttpGet("ByEmployeeId/{employeeId}")]
-        public async Task<IActionResult> GetCompanyForEmployee(int employeeId)
+        public async Task<IActionResult> GetCompanyByEmployee(int employeeId)
         {
             var company = await this._companyRepository.GetCompanyByEmployeeId(employeeId);
             if (company is null)
@@ -79,7 +79,7 @@ namespace WebApiDapperApp.Controllers
             return Ok(company);
         }
 
-        [HttpGet("WithEmployees/{id}")]
+        [HttpGet("{id}/WithEmployees")]
         public async Task<IActionResult> GetCompanyWithEmployees(int id)
         {
             var company = await this._companyRepository.GetCompanyWithEmployees(id);
@@ -89,6 +89,22 @@ namespace WebApiDapperApp.Controllers
             }
 
             return Ok(company);
+        }
+
+        [HttpGet("MultipleWithEmployees")]
+        public async Task<IActionResult> GetCompaniesWithEmployees()
+        {
+            var companies = await this._companyRepository.GetCompaniesWithEmployees();
+
+            return Ok(companies);
+        }
+
+        [HttpPost("CreateMultiple")]
+        public async Task<IActionResult> CreateMultipleCompanies(IEnumerable<CreateNewCompanyDTO> companiesDto)
+        {
+            await this._companyRepository.CreateMultipleCompanies(companiesDto);
+
+            return Ok();
         }
     }
 }
